@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Text;
 
 namespace AnagramSearcher
 {
@@ -12,7 +11,8 @@ namespace AnagramSearcher
 
         public Searcher(string path)
         {
-            loadFilePath = path;
+            loadFilePath = path + "\\input.txt";
+            ak.unloadFilePath = path + "\\output.txt";
         }
 
         public void Search()
@@ -29,14 +29,21 @@ namespace AnagramSearcher
 
         private void SearchAlgorithm()
         {
-            foreach (string line in File.ReadLines(loadFilePath, Encoding.UTF8))
+            using (FileStream stream = File.Open(loadFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                if (!string.IsNullOrWhiteSpace(line))
+                using (StreamReader reader = new StreamReader(stream))
                 {
-                    string anagram = Converter.GetAnagram(line.ToLower());
-                    if (!ak.ContainsAnagram(anagram))
+                    while (!reader.EndOfStream)
                     {
-                        ak.saveAnagram(anagram);
+                        string line = reader.ReadLine();
+                        if (!string.IsNullOrWhiteSpace(line))
+                        {
+                            string anagram = Converter.GetAnagram(line.ToLower());
+                            if (!ak.ContainsAnagram(anagram))
+                            {
+                                ak.saveAnagram(anagram);
+                            }
+                        }
                     }
                 }
             }

@@ -5,15 +5,11 @@ namespace AnagramSearcher
 {
     struct AnagramKeeper
     {
-        public string unloadFilePath
-        {
-            get;
-            set;
-        }
+        public string unloadFilePath;
 
         public void saveAnagram(string anagram)
         {
-            File.AppendAllText(unloadFilePath, anagram);
+            File.AppendAllText(unloadFilePath, anagram + System.Environment.NewLine);
         }
 
         public bool ContainsAnagram(string searchingAnagram)
